@@ -16,5 +16,9 @@ class RegistrationsController < ApplicationController
                 status: 500
             }
         end
+
+        DefaultSkills.all.each do |ds|
+            DefaultSkillMeasures.create!(user_id: user.id, default_skills_id: ds.id)
+        end
     end
 end

@@ -6,4 +6,8 @@ Rails.application.routes.draw do
 
   delete :logout, to: 'sessions#logout'
   get :logged_in, to: 'sessions#logged_in'
+
+
+  resources :user_skills, only: [:index, :create]
+  resources :default_skills, only: [:index]
 end
