@@ -3,8 +3,5 @@ class User < ApplicationRecord
     validates_presence_of :email
     validates_uniqueness_of :email
 
-    has_many :default_skill_measures, class_name: 'DefaultSkillMeasures'
-    has_many :default_skills, through: :default_skill_measures
-
-    has_many :user_skills, class_name: 'UserSkills'
+    has_many :skills, class_name: 'Skill'
 end

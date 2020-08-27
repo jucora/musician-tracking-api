@@ -7,18 +7,25 @@ class RegistrationsController < ApplicationController
         )
         if user
             session[:user_id] = user.id
+
+            defaultSkills=["Harmony", "Rhythm", "Improvisation", "Scales", "Arpeggios", "Ear training"]
+            userDefaultSkills = []
+            defaultSkills.each do |ds|
+                newSkill = Skill.create!(user_id: user.id, name: ds)
+                userDefaultSkills.push(newSkill)
+                Measure.create!(skill_id: newSkill.id)
+            end
+            
             render json: {
                 status: :created,
-                user: user
+                user: user,
+                default_skills: userDefaultSkills
             }
+
         else
             render json:{
                 status: 500
             }
-        end
-
-        DefaultSkills.all.each do |ds|
-            DefaultSkillMeasures.create!(user_id: user.id, default_skills_id: ds.id)
         end
     end
 end
