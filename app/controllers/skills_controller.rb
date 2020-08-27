@@ -33,5 +33,10 @@ class SkillsController < ApplicationController
         end
     end
 
+    def destroy
+        Skill.find(params[:skill_id]).destroy
+        render json: {status: 'SUCCESS', message: 'Skill removed', data: Skill.where(user_id: @current_user.id)}, status: :ok
+      end
+
     
 end

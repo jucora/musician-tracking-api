@@ -9,4 +9,6 @@ Rails.application.routes.draw do
 
   resources :skills, only: [:index, :create, :update]
   resources :measures, only: [:create]
+
+  delete 'skills/destroy/:skill_id', to: 'skills#destroy'
 end
