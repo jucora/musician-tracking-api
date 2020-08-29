@@ -6,7 +6,10 @@ class RegistrationsController < ApplicationController
             password_confirmation: params["user"]["password_confirmation"]
         )
         if user
-            session[:user_id] = user.id
+            session[:user_id] = {  value: user.id,
+            expires: 1.year.from_now,
+            same_site: :none,
+            secure: true}
 
             defaultSkills=["Harmony", "Rhythm", "Improvisation", "Scales", "Arpeggios", "Ear training"]
             userDefaultSkills = []
