@@ -8,5 +8,5 @@ class User < ApplicationRecord
     format: { with: VALID_EMAIL_REGEX },
     uniqueness: { case_sensitive: false }
 
-    has_many :skills, class_name: 'Skill'
+    has_many :skills, class_name: 'Skill', dependent: :destroy
 end
