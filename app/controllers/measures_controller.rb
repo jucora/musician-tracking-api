@@ -16,15 +16,16 @@ class MeasuresController < ApplicationController
 
 
     def create
-        newScore = Measure.create!(skill_id: params["skill"]["id"], score: params["skill"]["newScore"])
-        if newScore
+        newScore = Measure.new(skill_id: params["skill"]["id"], score: params["skill"]["newScore"])
+        if newScore.save
             render json: {
                 status: :updated,
                 newScore: newScore
             }
         else
             render json:{
-                status: 500
+                status: 500,
+                errors: newScore.errors.full_messages
             }
         end
     end
