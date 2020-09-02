@@ -1,11 +1,11 @@
 class RegistrationsController < ApplicationController
     def create
-        user = User.create!(
+        user = User.new(
             email: params["user"]["email"], 
             password: params["user"]["password"], 
-            password_confirmation: params["user"]["password_confirmation"]
+            password_confirmation: params["user"]["passwordConfirmation"]
         )
-        if user
+        if user.save
             session[:user_id] = user.id
 
             defaultSkills=["Harmony", "Rhythm", "Improvisation", "Scales", "Arpeggios", "Ear training"]
@@ -24,7 +24,8 @@ class RegistrationsController < ApplicationController
 
         else
             render json:{
-                status: 500
+                status: 500,
+                errors: user.errors.full_messages
             }
         end
     end

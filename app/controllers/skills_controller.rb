@@ -16,8 +16,8 @@ class SkillsController < ApplicationController
     end
 
     def create
-        newSkill = Skill.create!(name: params["newSkill"]["name"], user_id: @current_user.id)
-        if newSkill
+        newSkill = Skill.new(name: params["newSkill"]["name"], user_id: @current_user.id)
+        if newSkill.save
             newMeasure = Measure.create!(skill_id: newSkill.id)
             if newMeasure
                 render json: {
@@ -28,7 +28,8 @@ class SkillsController < ApplicationController
             end
         else
             render json:{
-                status: false
+                status: false,
+                errors: newSkill.errors.full_messages
             }
         end
     end
