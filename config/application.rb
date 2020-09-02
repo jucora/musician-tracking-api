@@ -25,7 +25,7 @@ module MusicianTrackingApi
       end
     
       allow do
-        origins "https://musician-tracking-app.web.app/"
+        origins "https://cors-anywhere.herokuapp.com/https://musician-tracking-app.web.app/"
         resource "*", headers: :any, methods: [:get, :post, :put, :patch, :delete, :options, :head], credentials: true
       end
     end
