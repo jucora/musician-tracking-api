@@ -1,7 +1,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
 
   allow do
-    origins "https://cors-anywhere.herokuapp.com/https://musician-tracking-app.web.app/"
+    origins "https://musician-tracking-app.web.app"
     resource "*", headers: :any, methods: [:get, :post, :put, :patch, :delete, :options, :head], credentials: true
   end
 
