@@ -9,4 +9,18 @@ class User < ApplicationRecord
     uniqueness: { case_sensitive: false }
 
     has_many :skills, class_name: 'Skill', dependent: :destroy
+
+    after_create :setDefaultValues
+
+   
+    def setDefaultValues
+        debugger
+        defaultSkills=["Harmony", "Rhythm", "Improvisation", "Scales", "Arpeggios", "Ear training"]
+        userDefaultSkills = []
+        defaultSkills.each do |ds|
+            newSkill = Skill.create!(user_id: self.id, name: ds)
+            userDefaultSkills.push(newSkill)
+            Measure.create!(skill_id: newSkill.id)
+        end
+    end
 end

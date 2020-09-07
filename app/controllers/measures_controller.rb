@@ -1,7 +1,7 @@
 class MeasuresController < ApplicationController
     include CurrentUserConcern
     def index
-        totalScore = Skill.joins(:measures).select('SUM(score) as total').where(user_id: @current_user.id )
+        totalScore = Skill.joins(:measures).select('SUM(score) as total').where(user_id: current_user.id )
         if totalScore
             render json: {
                 status: :founded,
