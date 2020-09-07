@@ -16,7 +16,7 @@ class SkillsController < ApplicationController
     end
 
     def create
-        newSkill = Skill.new(name: params["newSkill"]["name"], user_id: current_user.id)
+        newSkill = Skill.new(name: skill_params[:name], user_id: current_user.id)
         if newSkill.save
             newMeasure = Measure.create!(skill_id: newSkill.id)
             if newMeasure
@@ -37,7 +37,11 @@ class SkillsController < ApplicationController
     def destroy
         Skill.find(params[:skill_id]).destroy
         render json: {status: 'SUCCESS', message: 'Skill removed', data: Skill.where(user_id: current_user.id)}, status: :ok
-      end
+    end
 
-    
+    private
+
+    def skill_params
+        params.require(:newSkill).permit(:name)
+    end  
 end
