@@ -1,6 +1,6 @@
 class User < ApplicationRecord
     has_secure_password
-    validates_presence_of :email
+    validates_presence_of :email, :password, :password_confirmation
     validates_uniqueness_of :email
 
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -14,7 +14,6 @@ class User < ApplicationRecord
 
    
     def setDefaultValues
-        debugger
         defaultSkills=["Harmony", "Rhythm", "Improvisation", "Scales", "Arpeggios", "Ear training"]
         userDefaultSkills = []
         defaultSkills.each do |ds|
