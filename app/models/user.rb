@@ -23,7 +23,11 @@ class User < ApplicationRecord
         end
     end
 
-    def self.getScores(userId)
-        Skill.joins(:measures).select('SUM(score) as total').where(user_id: userId )
+    def self.getScores userId
+        Skill.joins(:measures).select('SUM(score) as total').where('user_id =?', userId)
+    end
+
+    def self.currentSkills userId
+        Skill.joins(:measures).select('skill_id, name, SUM(score)').group("name, skill_id").where(user_id: userId )
     end
 end
