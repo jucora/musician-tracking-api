@@ -22,4 +22,8 @@ class User < ApplicationRecord
             Measure.create!(skill_id: newSkill.id)
         end
     end
+
+    def self.getScores(userId)
+        Skill.joins(:measures).select('SUM(score) as total').where(user_id: userId )
+    end
 end
