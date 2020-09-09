@@ -1,7 +1,7 @@
 class MeasuresController < ApplicationController
-    include CurrentUserConcern
     def index
-        totalScore = User.getScores(current_user.id)
+        user = User.find(decode_token(request.headers['Authorization']))
+        totalScore = User.getScores(user.id)
         
         if totalScore
             render json: {
