@@ -55,3 +55,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bcrypt', '~> 3.1', '>= 3.1.15'
 gem 'rack-cors', :require => 'rack/cors'
+gem "knock", github: "nsarno/knock", branch: "master",
+    ref: "9214cd027422df8dc31eb67c60032fbbf8fc100b"
+gem 'active_model_serializers'

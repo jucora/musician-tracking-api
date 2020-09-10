@@ -1,25 +1,13 @@
 class RegistrationsController < ApplicationController
     def create
-        user = User.new(
-            email: params["user"]["email"], 
-            password: params["user"]["password"], 
-            password_confirmation: params["user"]["passwordConfirmation"]
-        )
+        user = User.new(user_params)
         if user.save
-            session[:user_id] = user.id
-
-            defaultSkills=["Harmony", "Rhythm", "Improvisation", "Scales", "Arpeggios", "Ear training"]
-            userDefaultSkills = []
-            defaultSkills.each do |ds|
-                newSkill = Skill.create!(user_id: user.id, name: ds)
-                userDefaultSkills.push(newSkill)
-                Measure.create!(skill_id: newSkill.id)
-            end
-            
+            payload = {user_id: user.id, email: user.email}
+            token = encode_token(payload)  
             render json: {
                 status: :created,
                 user: user,
-                default_skills: userDefaultSkills
+                jwt: token
             }
 
         else
@@ -28,5 +16,11 @@ class RegistrationsController < ApplicationController
                 errors: user.errors.full_messages
             }
         end
+    end
+
+    private
+
+    def user_params
+        params.require(:user).permit(:email, :password, :password_confirmation)
     end
 end

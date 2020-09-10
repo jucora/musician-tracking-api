@@ -1,27 +1,32 @@
 class SessionsController < ApplicationController
-    include CurrentUserConcern
-    def create
+    def create 
         user = User
-                .find_by(email: params["user"]["email"])
-                .try(:authenticate, params["user"]["password"])
+                .find_by(email: session_params[:email])
+                .try(:authenticate, session_params[:password])
     
         if user
-          session[:user_id] = user.id
-          render json: {
-            status: :created,
-            logged_in: true,
-            user: user
-          }
+            payload = {user_id: user.id, email: user.email}
+            token = encode_token(payload)  
+            render json: {
+                status: :created,
+                logged_in: true,
+                user: user,
+                jwt: token,
+            }
         else
           render json: { status: 401, error: 'Invalid user or password' }
         end
     end
 
     def logged_in
-        if @current_user
+        if request.headers['Authorization'] != 'null'
+            user = User.find(decode_token(request.headers['Authorization']))
+        end
+        
+        if user
             render json: {
                 logged_in: true,
-                current_user: @current_user
+                current_user: user
             }
         else
             render json: {
@@ -29,12 +34,8 @@ class SessionsController < ApplicationController
             }
         end
     end
-
-    def logout
-        reset_session
-        render json: {
-            status: 200,
-            logged_out: true
-        }
+    private
+    def session_params
+        params.require(:user).permit(:email, :password)
     end
 end

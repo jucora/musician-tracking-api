@@ -1,8 +1,7 @@
 class SkillsController < ApplicationController
-    include CurrentUserConcern
-
     def index
-        currentSkills = Skill.joins(:measures).select('skill_id, name, SUM(score)').group("name, skill_id").where(user_id: @current_user.id )
+        user = User.find(decode_token(request.headers['Authorization']))
+        currentSkills = User.currentSkills(user.id)
         if currentSkills
             render json: {
                 status: :founded,
@@ -15,8 +14,9 @@ class SkillsController < ApplicationController
         end
     end
 
-    def create
-        newSkill = Skill.new(name: params["newSkill"]["name"], user_id: @current_user.id)
+    def create 
+        user = User.find(decode_token(skill_params[:token]))
+        newSkill = Skill.new(name: skill_params[:name], user_id: user.id)
         if newSkill.save
             newMeasure = Measure.create!(skill_id: newSkill.id)
             if newMeasure
@@ -36,8 +36,12 @@ class SkillsController < ApplicationController
 
     def destroy
         Skill.find(params[:skill_id]).destroy
-        render json: {status: 'SUCCESS', message: 'Skill removed', data: Skill.where(user_id: @current_user.id)}, status: :ok
-      end
+        render json: {status: 'SUCCESS', message: 'Skill removed'}, status: :ok
+    end
 
-    
+    private
+
+    def skill_params
+        params.require(:newSkill).permit(:name, :token)
+    end  
 end
